@@ -1,0 +1,61 @@
+<html> 
+<head> 
+    <title> File Transfer Example </ title> 
+
+    <Script  type = "text / JavaScript"  charset = "UTF-8"  src = "cordova.js" > </ Script> 
+    <Script  type = "text / JavaScript"  charset = "UTF-8" > 
+
+        // Wait for device API Libraries to load 
+        // 
+        document . addEventListener ( " deviceready " , onDeviceReady ,  false ); 
+
+        // device APIs are available 
+        // 
+        function onDeviceReady ()  { 
+            // Retrieve Image file location from specified source 
+            Navigator . Camera . getPicture ( 
+                uploadPhoto , 
+                function ( message )  { Alert ( 'get Picture failed' );  }, 
+                { 
+                    quality          :  50 , 
+                    destinationType : Navigator . Camera . DestinationType . FILE_URI , 
+                    sourceType       : Navigator . Camera . PictureSourceType . Photolibrary 
+                } 
+            ); 
+        } 
+
+        function uploadPhoto ( imageURI )  { 
+            var options =  new  FileUploadOptions (); 
+            options . FileKey = "file" ; 
+            options . fileName = imageURI . substr ( imageURI . lastIndexOf ( '/' ) + 1 ); 
+            options . mimeType = "Image / JPEG" ; 
+
+            var params =  {}; 
+            params . value1 =  "Test" ; 
+            params . value2 =  "param" ; 
+
+            options . params = params ; 
+
+            var ft =  new  FileTransfer (); 
+            ft . upload ( imageURI , encodeURI ( "HTTP: // Some .server.com / upload.php " ), win , fail , options ); 
+        } 
+
+        function win ( r )  { 
+            console . log ( "Code ="  + r . responseCode ); 
+            console . log ( "Response ="  + r . Response ); 
+            console . log ( "Sent ="  + r . bytesSent ); 
+        } 
+
+        function fail ( Error )  { 
+            Alert ( "An Error HAS occurred: Code ="  + Error . code ); 
+            console . log ( "Error upload source"  + Error . source ); 
+            console . log ( "Error upload target"  + Error . target ); 
+        } 
+
+        </ Script> 
+</ head> 
+<body> 
+    <h1> Example </ h1> 
+    <P> Upload File </ P> 
+</ body> 
+</ html>
